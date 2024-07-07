@@ -19,6 +19,7 @@ export type GenerateInvoiceFacadeOutputDto = GenerateInvoiceFacadeInputDto & {
   total: number;
 };
 
+export type FindInvoiceFacadeInputDto = { id: string };
 export interface FindInvoiceFacadeOutputDTO {
   id: string;
   name: string;
