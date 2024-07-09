@@ -17,7 +17,8 @@
   },
   "scripts": {
     "test": "jest",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "migrate": "node -r ts-node/register/transpile-only ./src/infra/db/migration.config.ts"
   },
   "dependencies": {
     "dotenv": "^16.0.0",
