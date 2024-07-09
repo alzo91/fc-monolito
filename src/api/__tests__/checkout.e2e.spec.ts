@@ -1,15 +1,23 @@
-import { app, sequelize } from "../express";
+import { Sequelize } from "sequelize-typescript";
 import request from "supertest";
+
+import { app, setupDb } from "../express";
 
 import { ClientModel } from "../../modules/client-adm/repository/client.model";
 import { ProductModel } from "../../modules/product-adm/repository/product.model";
-//import ProductModel from "../../modules/store-catalog/repository/product.model";
+import { dbDown } from "../../infra/db/migration.config";
+
 describe("E2E test for checkout", () => {
+  let sequelize: Sequelize;
+
   beforeEach(async () => {
-    await sequelize.sync({ force: true });
+    const { sequelize: db } = await setupDb();
+    sequelize = db;
+    // await sequelize.sync({ force: true });
   });
 
   afterAll(async () => {
+    await dbDown(sequelize);
     await sequelize.close();
   });
 

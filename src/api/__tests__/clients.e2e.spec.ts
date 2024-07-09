@@ -1,12 +1,20 @@
-import { app, sequelize } from "../express";
+import { Sequelize } from "sequelize-typescript";
 import request from "supertest";
 
+import { app, setupDb } from "../express";
+import { dbDown } from "../../infra/db/migration.config";
+
 describe("E2E test for client", () => {
+  let sequelize: Sequelize;
+
   beforeEach(async () => {
-    await sequelize.sync({ force: true });
+    const { sequelize: db } = await setupDb();
+    sequelize = db;
+    // await sequelize.sync({ force: true });
   });
 
   afterAll(async () => {
+    await dbDown(sequelize);
     await sequelize.close();
   });
 

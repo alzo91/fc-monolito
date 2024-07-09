@@ -1,21 +1,27 @@
-import { app, sequelize } from "../express";
 import request from "supertest";
+import { Sequelize } from "sequelize-typescript";
+
+import { app, setupDb } from "../express";
+import { dbDown } from "../../infra/db/migration.config";
 
 import { Id, Address } from "../../modules/@shared/domain/value-object";
-
 import Product from "../../modules/invoice/domain/invoice-item.entity";
 import Invoice from "../../modules/invoice/domain/invoice.entity";
 import InvoiceRepository from "../../modules/invoice/repository/invoice.repository";
 
 describe("E2E test for invoice", () => {
+  let sequelize: Sequelize;
+
   beforeEach(async () => {
-    await sequelize.sync({ force: true });
+    const { sequelize: db } = await setupDb();
+    sequelize = db;
+    // await sequelize.sync({ force: true });
   });
 
   afterAll(async () => {
+    await dbDown(sequelize);
     await sequelize.close();
   });
-
   it("should do the invoice", async () => {
     const address = new Address(
       "Main Street",
